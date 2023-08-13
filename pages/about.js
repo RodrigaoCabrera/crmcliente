@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Layout from "../components/Layout";
 
-export default function Index() {
+export default function Nosotros() {
   return (
     <div>
       <Layout>
-        <h2>Desde index</h2>
+        <h2>Desde Nosotros</h2>
       </Layout>
     </div>
   );
