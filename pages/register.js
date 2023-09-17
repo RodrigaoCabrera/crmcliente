@@ -16,6 +16,11 @@ const Register = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
+      lastName: Yup.string().required("LastName is required"),
+      email: Yup.string().email().required("Email is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
     }),
     onSubmit: (values) => {
       console.log("enviando");
@@ -68,8 +73,15 @@ const Register = () => {
                 placeholder="LastName"
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
             </div>
+            {formik.touched.lastName && formik.errors.lastName && (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p className="font-bold">Error</p>
+                <p>{formik.errors.lastName}</p>
+              </div>
+            )}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -84,8 +96,15 @@ const Register = () => {
                 placeholder="Email address"
                 value={formik.values.email}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
             </div>
+            {formik.touched.email && formik.errors.email && (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p className="font-bold">Error</p>
+                <p>{formik.errors.email}</p>
+              </div>
+            )}
             <div>
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -100,9 +119,15 @@ const Register = () => {
                 placeholder="Password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
             </div>
-
+            {formik.touched.password && formik.errors.password && (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                <p className="font-bold">Error</p>
+                <p>{formik.errors.password}</p>
+              </div>
+            )}
             <input
               type="submit"
               className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900 cursor-pointer"
