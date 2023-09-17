@@ -1,7 +1,10 @@
 import React from "react";
 import Head from "next/head";
 import Siderbar from "./Siderbar";
+import { useRouter } from "next/router";
 const Layout = ({ children }) => {
+  // Routing de next
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -15,15 +18,20 @@ const Layout = ({ children }) => {
         />
         <script src="https://cdn.tailwindcss.com"></script>
       </Head>
-
-      <div className="min-h-screen">
-        <div className="flex min-h-screen">
-          <Siderbar />
-          <main className="sm:w-2/3 xl:w-4/5 sm:min-h-screen p-5">
-            {children}
-          </main>
+      {router.pathname === "/login" || router.pathname === "/register" ? (
+        <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
+          {children}
         </div>
-      </div>
+      ) : (
+        <div className="min-h-screen">
+          <div className="flex min-h-screen">
+            <Siderbar />
+            <main className="sm:w-2/3 xl:w-4/5 sm:min-h-screen p-5">
+              {children}
+            </main>
+          </div>
+        </div>
+      )}
     </>
   );
 };
