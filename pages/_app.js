@@ -1,5 +1,4 @@
-import '@/styles/globals.css'
-
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export default function MyApp({ Component, pageProps }) {
+  console.log("desde_app.js");
+  return <Component {...pageProps} />;
 }
