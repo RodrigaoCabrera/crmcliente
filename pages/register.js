@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
 // Formik
@@ -23,6 +24,8 @@ const Register = () => {
   // Get products from Graphql
   const [newUser] = useMutation(NEW_USER);
 
+  // Router form next
+  const router = useRouter();
   // Form validate
   const formik = useFormik({
     initialValues: {
@@ -55,6 +58,14 @@ const Register = () => {
           },
         });
         console.log(data);
+
+        // User created successfully
+        setMessage("User created successfully");
+        setTimeout(() => {
+          setMessage(null);
+          // Redirect to login page
+          router.push("/login");
+        }, 3000);
       } catch (error) {
         setMessage(error.message.replace("Graphql error", ""));
         setTimeout(() => {
