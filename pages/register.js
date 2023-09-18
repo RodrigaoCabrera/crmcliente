@@ -5,7 +5,22 @@ import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+// Graphql
+import { useMutation, gql } from "@apollo/client";
+const NEW_USER = gql`
+  mutation newUser($input: UserInput) {
+    newUser(input: $input) {
+      name
+      lastName
+      email
+      created
+    }
+  }
+`;
 const Register = () => {
+  // Get products from Graphql
+  const [newUser] = useMutation(NEW_USER);
+
   // Form validate
   const formik = useFormik({
     initialValues: {
@@ -22,9 +37,25 @@ const Register = () => {
         .required("Password is required")
         .min(6, "Password must be at least 6 characters"),
     }),
-    onSubmit: (values) => {
-      console.log("enviando");
-      console.log(values);
+    onSubmit: async (values) => {
+      /* console.log("enviando");
+      console.log(values); */
+      const { name, lastName, email, password } = values;
+      try {
+        const { data } = await newUser({
+          variables: {
+            input: {
+              name,
+              lastName,
+              email,
+              password,
+            },
+          },
+        });
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   return (
