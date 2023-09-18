@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
 
 // Formik
@@ -18,6 +18,8 @@ const NEW_USER = gql`
   }
 `;
 const Register = () => {
+  // Message to create a new user
+  const [message, setMessage] = useState(null);
   // Get products from Graphql
   const [newUser] = useMutation(NEW_USER);
 
@@ -54,12 +56,24 @@ const Register = () => {
         });
         console.log(data);
       } catch (error) {
-        console.log(error);
+        setMessage(error.message.replace("Graphql error", ""));
+        setTimeout(() => {
+          setMessage(null);
+        }, 3000);
       }
     },
   });
+
+  const showMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{message}</p>
+      </div>
+    );
+  };
   return (
     <Layout>
+      {message && showMessage()}
       <h1 className="text-center text-2xl- text-white font-light">Register</h1>
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-sm">
