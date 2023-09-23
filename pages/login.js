@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
 // Formik
@@ -16,6 +17,11 @@ const USER_AUTHETICATOR = gql`
 `;
 
 const login = () => {
+  const [authenticationsMessage, setAuthenticationsMessage] = useState(null);
+
+  // Router form next
+  const router = useRouter();
+
   // Mutation for create new users
   const [authenticateUser] = useMutation(USER_AUTHETICATOR);
 
@@ -43,14 +49,38 @@ const login = () => {
           },
         });
         console.log(data);
+        setAuthenticationsMessage("Authentication...");
+
+        // Save token on local storage
+        const { token } = data.authenticateUser;
+        localStorage.setItem("token", token);
+
+        // Redirect to home
+        setTimeout(() => {
+          setAuthenticationsMessage(null);
+          // Redirect to home
+          router.push("/");
+        }, 2000);
       } catch (error) {
-        console.log(error);
+        setAuthenticationsMessage(error.message.replace("Graphql error", ""));
+        setTimeout(() => {
+          setAuthenticationsMessage(null);
+        }, 3000);
       }
     },
   });
 
+  const showAuthenticationsMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{authenticationsMessage}</p>
+      </div>
+    );
+  };
+
   return (
     <Layout>
+      {authenticationsMessage && showAuthenticationsMessage()}
       <h1 className="text-center text-2xl- text-white font-light">login</h1>
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-sm">
