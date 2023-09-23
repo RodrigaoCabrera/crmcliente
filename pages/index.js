@@ -17,7 +17,6 @@ const GET_USER_CLIENTS = gql`
 `;
 export default function Index() {
   // Get from apollo
-
   const { data, loading, error } = useQuery(GET_USER_CLIENTS);
   console.log(data);
   if (loading) {
