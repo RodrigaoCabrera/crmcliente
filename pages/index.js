@@ -1,4 +1,5 @@
 import Layout from "../components/Layout";
+import { useRouter } from "next/router";
 
 // Graphql
 import { useQuery, gql } from "@apollo/client";
@@ -16,11 +17,18 @@ const GET_USER_CLIENTS = gql`
   }
 `;
 export default function Index() {
+  // Router form next
+  const router = useRouter();
   // Get from apollo
   const { data, loading, error } = useQuery(GET_USER_CLIENTS);
-  console.log(data);
+
   if (loading) {
     return <p>Loading</p>;
+  }
+  // Redirect to login without data
+  if (!data.getClientsSeller) {
+    router.push("/login");
+    return;
   }
   return (
     <div>
