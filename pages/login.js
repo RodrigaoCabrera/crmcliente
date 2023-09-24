@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-// Formik
+// Formik and Yup
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
