@@ -1,11 +1,30 @@
 import React from "react";
 import Layout from "../components/Layout";
+import { useRouter } from "next/router";
 
 // Formik
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+// Graphql
+import { useMutation, gql } from "@apollo/client";
+const NEW_CLIENT = gql`
+  mutation NewClient($input: ClientInput) {
+    newClient(input: $input) {
+      name
+      lastName
+      telephone
+      email
+      business
+    }
+  }
+`;
 const newClient = () => {
+  // Router form next
+  const router = useRouter();
+  // New client mutation
+  const [newClient] = useMutation(NEW_CLIENT);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -22,10 +41,28 @@ const newClient = () => {
         .required("Email is required")
         .email("Email is no valid"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const { name, lastName, telephone, email, business } = values;
+        const { data } = await newClient({
+          variables: {
+            input: {
+              name,
+              lastName,
+              telephone,
+              email,
+              business,
+            },
+          },
+        });
+        // Redirect to home
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
+
   return (
     <Layout>
       <h1>New client</h1>
