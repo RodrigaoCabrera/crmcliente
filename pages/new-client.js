@@ -19,11 +19,36 @@ const NEW_CLIENT = gql`
     }
   }
 `;
+const GET_USER_CLIENTS = gql`
+  query GetClientsSeller {
+    getClientsSeller {
+      id
+      name
+      lastName
+      email
+      telephone
+      business
+    }
+  }
+`;
 const newClient = () => {
   // Router form next
   const router = useRouter();
   // New client mutation
-  const [newClient] = useMutation(NEW_CLIENT);
+  const [newClient] = useMutation(NEW_CLIENT, {
+    update(cache, { data: { newClient } }) {
+      // Get cache object
+      const { getClientsSeller } = cache.readQuery({ query: GET_USER_CLIENTS });
+
+      // Re-write cache
+      cache.writeQuery({
+        query: GET_USER_CLIENTS,
+        data: {
+          getClientsSeller: [...getClientsSeller, newClient],
+        },
+      });
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
