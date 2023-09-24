@@ -2,10 +2,20 @@ import React from "react";
 
 // Alert message
 import Swal from "sweetalert2";
+// Graphql
+import { useMutation, gql } from "@apollo/client";
+const DELETE_CLIENT = gql`
+  mutation DeleteClient($id: ID!) {
+    deleteClient(id: $id)
+  }
+`;
 
 const Client = ({ key, client }) => {
+  // Mutation for create new users
+  const [deleteClient] = useMutation(DELETE_CLIENT);
+
   const { name, lastName, business, email, phone, id } = client;
-  const deleteClient = (id) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure you want to delete the client?",
       text: "You won't be able to revert this!",
@@ -14,14 +24,20 @@ const Client = ({ key, client }) => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log("eliminando", id);
-        Swal.fire(
-          "Deleted cliente!",
-          "Your client has been deleted.",
-          "success"
-        );
+        try {
+          // Delete for ID
+          const { data } = await deleteClient({
+            variables: {
+              id,
+            },
+          });
+          console.log(data);
+          Swal.fire("Deleted cliente!", data.deleteClient, "success");
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
   };
@@ -36,7 +52,7 @@ const Client = ({ key, client }) => {
         <button
           type="button"
           className=" flex justify-center items-center bg-red-700 py-2 px-2 w-full text-white rounded text-xs uppercase font-bold"
-          onClick={() => deleteClient(id)}
+          onClick={() => handleDelete(id)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
