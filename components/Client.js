@@ -10,9 +10,39 @@ const DELETE_CLIENT = gql`
   }
 `;
 
+const GET_USER_CLIENTS = gql`
+  query GetClientsSeller {
+    getClientsSeller {
+      id
+      name
+      lastName
+      email
+      telephone
+      business
+    }
+  }
+`;
+
 const Client = ({ key, client }) => {
   // Mutation for create new users
-  const [deleteClient] = useMutation(DELETE_CLIENT);
+  const [deleteClient] = useMutation(DELETE_CLIENT, {
+    update(cache) {
+      // Get cache object copy
+      const { getClientsSeller } = cache.readQuery({
+        query: GET_USER_CLIENTS,
+      });
+
+      // Re-write cache object
+      cache.writeQuery({
+        query: GET_USER_CLIENTS,
+        data: {
+          getClientsSeller: getClientsSeller.filter(
+            (client) => client.id !== id
+          ),
+        },
+      });
+    },
+  });
 
   const { name, lastName, business, email, phone, id } = client;
   const handleDelete = (id) => {
