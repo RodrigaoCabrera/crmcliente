@@ -1,9 +1,29 @@
 import React from "react";
 
+// Alert message
+import Swal from "sweetalert2";
+
 const Client = ({ key, client }) => {
   const { name, lastName, business, email, phone, id } = client;
   const deleteClient = (id) => {
-    console.log("eliminando", id);
+    Swal.fire({
+      title: "Are you sure you want to delete the client?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("eliminando", id);
+        Swal.fire(
+          "Deleted cliente!",
+          "Your client has been deleted.",
+          "success"
+        );
+      }
+    });
   };
   return (
     <tr key={key}>

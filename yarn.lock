@@ -422,6 +422,11 @@ styled-jsx@5.1.1:
   dependencies:
     client-only "0.0.1"
 
+sweetalert2@^11.7.28:
+  version "11.7.28"
+  resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.7.28.tgz#472b8617a794cb823645ebad89198c7ae39cfe3a"
+  integrity sha512-9895DVuYTDlV4Hx4IJablFKMdSqzwpy0PKycztbO4cXnOeVMmw55weOq4gcZAh3/tAyunCKjApFDrlSAcswwcA==
+
 symbol-observable@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/symbol-observable/-/symbol-observable-4.0.0.tgz#5b425f192279e87f2f9b937ac8540d1984b39205"
