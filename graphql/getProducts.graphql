@@ -1,0 +1,8 @@
+query GetProducts {
+  getProducts {
+    id
+    name
+    exist
+    price
+  }
+}

@@ -50,7 +50,9 @@ export default function Index() {
               <th className="w-1/5 py-2">Business</th>
               <th className="w-1/5 py-2">Email</th>
               <th className="w-1/5 py-2">phone</th>
-              <th className="w-1/5 py-2">Actions</th>
+              <th colSpan={2} className="w-1/5 py-2">
+                Actions
+              </th>
             </tr>
           </thead>
 
