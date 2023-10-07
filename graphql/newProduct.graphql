@@ -1,0 +1,7 @@
+mutation NewProduct($input: ProductInput) {
+  newProduct(input: $input) {
+    name
+    exist
+    price
+  }
+}
