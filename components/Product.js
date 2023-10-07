@@ -1,4 +1,5 @@
 import React from "react";
+import Router from "next/router";
 // Alert message
 import Swal from "sweetalert2";
 
@@ -58,6 +59,14 @@ const Product = ({ key, product }) => {
       }
     });
   };
+
+  // Edit product
+  const handleEdit = () => {
+    Router.push({
+      pathname: "/editproduct/:{id}",
+      query: { id },
+    });
+  };
   return (
     <tr key={key}>
       <td className="border px-4 py-2">{name}</td>
@@ -89,7 +98,7 @@ const Product = ({ key, product }) => {
         <button
           type="button"
           className=" flex justify-center items-center bg-green-700 py-2 px-2 w-full text-white rounded text-xs uppercase font-bold"
-          //   onClick={() => handleEdit(id)}
+          onClick={() => handleEdit(id)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,83 +1,89 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
-// Alert message
-import Swal from "sweetalert2";
 
 // Formik
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+// Alert message
+import Swal from "sweetalert2";
+
 // Graphql
 import { useQuery, gql, useMutation } from "@apollo/client";
 
-const GET_CLIENT = gql`
-  query GetClient($id: ID!) {
-    getClient(id: $id) {
+const GET_PRODUCT = gql`
+  query GetProduct($id: ID!) {
+    getProduct(id: $id) {
+      id
       name
-      lastName
-      telephone
-      email
-      business
+      exist
+      price
     }
   }
 `;
 
-const UPDATE_CLIENT = gql`
-  mutation UpdateClient($id: ID!, $input: ClientInput) {
-    updateClient(id: $id, input: $input) {
+const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($id: ID!, $input: ProductInput) {
+    updateProduct(id: $id, input: $input) {
       name
-      lastName
+      exist
+      price
     }
   }
 `;
-const EditClient = () => {
+
+const EditProduct = () => {
   // Get current id
   const router = useRouter();
   const {
     query: { id },
   } = router;
 
-  // Get current client
-  const { data, loading, error } = useQuery(GET_CLIENT, {
+  // Get current product
+  const { data, loading, error } = useQuery(GET_PRODUCT, {
     variables: { id },
   });
-  // Update current client
-  const [updateClient] = useMutation(UPDATE_CLIENT);
+
+  // Update product
+  const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
   // Yup validation schema
   const schemaValidation = Yup.object({
-    name: Yup.string().required("Name is required"),
-    lastName: Yup.string().required("Last name is required"),
-    business: Yup.string().required("Business is required"),
-    email: Yup.string()
-      .required("Email is required")
-      .email("Email is no valid"),
+    name: Yup.string().required("Product name is required"),
+    exist: Yup.number()
+      .required("Exist is required")
+      .positive("Negative numbers are not accepted")
+      .integer("Must be an integer"),
+    price: Yup.number()
+      .required("price is required")
+      .positive("Negative numbers are not accepted"),
   });
 
   if (loading) return <h1>Loading...</h1>;
-  const { getClient } = data;
+  const { getProduct } = data;
 
   // Upadte client in db
   const handleUpdate = async (values) => {
-    console.log(values);
-    const { name, lastName, business, email, telephone } = values;
+    const { name, exist, price } = values;
     try {
-      const { data } = await updateClient({
+      const { data } = await updateProduct({
         variables: {
           id,
-          input: { name, lastName, business, email, telephone },
+          input: { name, exist, price },
         },
       });
+
       // Sweet alert
-      Swal.fire("Update client", "Client updated successfully", "success");
+      Swal.fire("Update product", "Product updated successfully", "success");
 
       // Redirect to home
-      router.push("/");
+      router.push("/products");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light ">Edit client</h1>
@@ -86,7 +92,7 @@ const EditClient = () => {
           <Formik
             validationSchema={schemaValidation}
             enableReinitialize
-            initialValues={getClient}
+            initialValues={getProduct}
             onSubmit={(values) => handleUpdate(values)}
           >
             {(props) => {
@@ -125,94 +131,50 @@ const EditClient = () => {
                       className="block text-gray-700 text-sm font bold mb-2"
                       htmlFor="lastName"
                     >
-                      Last name
+                      Exist
                     </label>
 
                     <input
-                      type="text"
+                      type="number"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                      id="lastName"
-                      placeholder="Client last name"
+                      id="exist"
+                      placeholder="Product quantity"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      value={props.values.lastName}
+                      value={props.values.exist}
                     />
                   </div>
-                  {props.touched.lastName && props.errors.lastName && (
+                  {props.touched.exist && props.errors.exist && (
                     <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                       <p className="font-bold">Error</p>
-                      <p>{props.errors.lastName}</p>
+                      <p>{props.errors.exist}</p>
                     </div>
                   )}
 
                   <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font bold mb-2"
-                      htmlFor="business"
+                      htmlFor="price"
                     >
-                      Business
+                      Price
                     </label>
 
                     <input
-                      type="text"
+                      type="number"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                      id="business"
-                      placeholder="Client business"
+                      id="price"
+                      placeholder="Product price"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      value={props.values.business}
+                      value={props.values.price}
                     />
                   </div>
-                  {props.touched.business && props.errors.business && (
+                  {props.touched.price && props.errors.price && (
                     <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                       <p className="font-bold">Error</p>
-                      <p>{props.errors.business}</p>
+                      <p>{props.errors.price}</p>
                     </div>
                   )}
-
-                  <div className="mb-4">
-                    <label
-                      className="block text-gray-700 text-sm font bold mb-2"
-                      htmlFor="email"
-                    >
-                      Email
-                    </label>
-
-                    <input
-                      type="email"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                      id="email"
-                      placeholder="Client email address"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.email}
-                    />
-                  </div>
-                  {props.touched.email && props.errors.email && (
-                    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                      <p className="font-bold">Error</p>
-                      <p>{props.errors.email}</p>
-                    </div>
-                  )}
-                  <div className="mb-4">
-                    <label
-                      className="block text-gray-700 text-sm font bold mb-2"
-                      htmlFor="telephone"
-                    >
-                      Telephone
-                    </label>
-
-                    <input
-                      type="tel"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                      id="telephone"
-                      placeholder="Client telephone address"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.telephone}
-                    />
-                  </div>
-
                   <input
                     type="submit"
                     className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
@@ -228,4 +190,4 @@ const EditClient = () => {
   );
 };
 
-export default EditClient;
+export default EditProduct;
