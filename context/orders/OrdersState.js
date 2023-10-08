@@ -22,10 +22,20 @@ const OrderState = ({ children }) => {
       payload: client,
     });
   };
+
+  // Update products
+  const addProducts = (products) => {
+    dispatch({
+      type: SELECT_PRODUCT,
+      payload: products,
+    });
+  };
+
   return (
     <OrderContext.Provider
       value={{
         addClient,
+        addProducts,
       }}
     >
       {children}
