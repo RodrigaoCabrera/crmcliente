@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
+// Import context
+import OrderContext from "@/context/orders/OrdersContext";
 
 // Graphql
 import { gql, useQuery } from "@apollo/client";
@@ -20,10 +23,14 @@ import Select from "react-select";
 const AssignClient = () => {
   const [client, setClient] = useState([]);
 
+  // use Context
+  const orderContext = useContext(OrderContext);
+  const { addClient } = orderContext;
+
   // Get client
   const { data, loading, error } = useQuery(GET_USER_CLIENTS);
   useEffect(() => {
-    console.log(client);
+    addClient(client);
   }, [client]);
 
   const handleSelect = (option) => {
@@ -41,7 +48,6 @@ const AssignClient = () => {
       </p>
       <Select
         options={getClientsSeller}
-        isMulti={true}
         onChange={(option) => handleSelect(option)}
         getOptionValue={(options) => options.id}
         getOptionLabel={(options) => options.name}

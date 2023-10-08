@@ -15,13 +15,17 @@ const OrderState = ({ children }) => {
 
   const [state, dispatch] = useReducer(OrderReducer, initialState);
 
-  const handleTest = () => {
-    console.log("hola mundo");
+  // Update client
+  const addClient = (client) => {
+    dispatch({
+      type: SELECT_CLIENT,
+      payload: client,
+    });
   };
   return (
     <OrderContext.Provider
       value={{
-        handleTest,
+        addClient,
       }}
     >
       {children}
