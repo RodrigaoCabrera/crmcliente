@@ -8,14 +8,16 @@ import { SELECT_CLIENT, SELECT_PRODUCT, PRODUCT_QUANTITY } from "../../types";
 const OrderState = ({ children }) => {
   // Order State
   const initialState = {
-    client: [],
+    client: {},
     products: [],
     total: 0,
   };
 
   const [state, dispatch] = useReducer(OrderReducer, initialState);
 
-  const handleTest = () => {};
+  const handleTest = () => {
+    console.log("hola mundo");
+  };
   return (
     <OrderContext.Provider
       value={{
