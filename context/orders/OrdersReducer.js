@@ -12,6 +12,15 @@ export default (state, action) => {
         ...state,
         products: action.payload,
       };
+    case PRODUCT_QUANTITY:
+      return {
+        ...state,
+        products: state.products.map((product) =>
+          product.id === action.payload.id
+            ? (product = action.payload)
+            : product
+        ),
+      };
     default:
       return state;
   }

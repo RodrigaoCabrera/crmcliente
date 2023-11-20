@@ -24,19 +24,39 @@ const OrderState = ({ children }) => {
   };
 
   // Update products
-  const addProducts = (products) => {
+  const addProducts = (productsSelected) => {
+    let newProducts;
+    if (state.products.length > 0) {
+      newProducts = productsSelected.map((product) => {
+        const newObject = state.products.find(
+          (stateProduct) => stateProduct.id === product.id
+        );
+        return { ...product, ...newObject };
+      });
+    } else {
+      newProducts = productsSelected;
+    }
     dispatch({
       type: SELECT_PRODUCT,
-      payload: products,
+      payload: newProducts,
     });
   };
 
+  // Update products quantity
+  const updateProductsQuantity = (newQuantity, product) => {
+    const newProduct = { ...product, quantity: newQuantity };
+    dispatch({
+      type: PRODUCT_QUANTITY,
+      payload: newProduct,
+    });
+  };
   return (
     <OrderContext.Provider
       value={{
         products: state.products,
         addClient,
         addProducts,
+        updateProductsQuantity,
       }}
     >
       {children}
