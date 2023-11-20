@@ -24,7 +24,7 @@ const ProductSummary = ({ key, product }) => {
         placeholder="Quantity"
         className="shadow apperance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:ml-4"
         onChange={(e) => {
-          updateProductsQuantity(e.target.value, product);
+          updateProductsQuantity(Number(e.target.value), product);
           updatePriceTotal();
         }}
       />
