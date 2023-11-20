@@ -66,6 +66,7 @@ const OrderState = ({ children }) => {
       value={{
         products: state.products,
         total: state.total,
+        client: state.client,
         addClient,
         addProducts,
         updateProductsQuantity,
