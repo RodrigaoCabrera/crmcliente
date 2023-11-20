@@ -6,7 +6,7 @@ import OrderContext from "@/context/orders/OrdersContext";
 const ProductSummary = ({ key, product }) => {
   // use Context
   const orderContext = useContext(OrderContext);
-  const { updateProductsQuantity } = orderContext;
+  const { updateProductsQuantity, updatePriceTotal } = orderContext;
 
   const { name, price } = product;
   return (
@@ -23,7 +23,10 @@ const ProductSummary = ({ key, product }) => {
         type="number"
         placeholder="Quantity"
         className="shadow apperance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:ml-4"
-        onChange={(e) => updateProductsQuantity(e.target.value, product)}
+        onChange={(e) => {
+          updateProductsQuantity(e.target.value, product);
+          updatePriceTotal();
+        }}
       />
     </section>
   );

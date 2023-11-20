@@ -1,4 +1,9 @@
-import { SELECT_CLIENT, SELECT_PRODUCT, PRODUCT_QUANTITY } from "../../types";
+import {
+  SELECT_CLIENT,
+  SELECT_PRODUCT,
+  PRODUCT_QUANTITY,
+  UPDATE_PRICE_TOTAL,
+} from "../../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -19,6 +24,14 @@ export default (state, action) => {
           product.id === action.payload.id
             ? (product = action.payload)
             : product
+        ),
+      };
+    case UPDATE_PRICE_TOTAL:
+      return {
+        ...state,
+        total: state.products.reduce(
+          (newTotal, article) => (newTotal += article.price * article.quantity),
+          0
         ),
       };
     default:

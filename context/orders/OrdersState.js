@@ -3,7 +3,12 @@ import React, { useReducer } from "react";
 import OrderContext from "./OrdersContext";
 import OrderReducer from "./OrdersReducer";
 
-import { SELECT_CLIENT, SELECT_PRODUCT, PRODUCT_QUANTITY } from "../../types";
+import {
+  SELECT_CLIENT,
+  SELECT_PRODUCT,
+  PRODUCT_QUANTITY,
+  UPDATE_PRICE_TOTAL,
+} from "../../types";
 
 const OrderState = ({ children }) => {
   // Order State
@@ -50,13 +55,21 @@ const OrderState = ({ children }) => {
       payload: newProduct,
     });
   };
+
+  const updatePriceTotal = () => {
+    dispatch({
+      type: UPDATE_PRICE_TOTAL,
+    });
+  };
   return (
     <OrderContext.Provider
       value={{
         products: state.products,
+        total: state.total,
         addClient,
         addProducts,
         updateProductsQuantity,
+        updatePriceTotal,
       }}
     >
       {children}
